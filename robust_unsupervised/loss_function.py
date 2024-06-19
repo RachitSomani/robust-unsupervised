@@ -38,8 +38,10 @@ class MultiscaleLPIPS:
                 break
             
             if weight > 0:
-                loss = self.measure_lpips(x, y, mask)
-                losses.append(weight * loss)
+                loss_x_to_y = self.measure_lpips(x, y, mask)
+                loss_y_to_x = self.measure_lpips(y, x, mask)
+                symmetric_loss = (loss_x_to_y + loss_y_to_x) / 2.0
+                losses.append(weight * symmetric_loss)
 
             if mask is not None:
                 mask = F.avg_pool2d(mask, 2)
