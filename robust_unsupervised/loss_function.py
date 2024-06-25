@@ -24,7 +24,7 @@ class MultiscaleLPIPS:
 
         return self.lpips_network(x, y, normalize=True).mean() 
 
-    def __call__(self, f_hat, x_clean: Tensor, y: Tensor, mask: Optional[Tensor] = None):
+    def __call__(self, f_hat, x_clean: Tensor, y: Tensor, mask: Optional[Tensor] = None, consistency_weight: float = 0.1):
         x = f_hat(x_clean)
 
         losses = []
@@ -32,6 +32,10 @@ class MultiscaleLPIPS:
         if mask is not None:
             mask = F.interpolate(mask, y.shape[-1], mode="area")
 
+        x_perturbed = x_clean + torch.randn_like(x_clean) * 0.01  # Add small perturbations
+        x_perturbed = f_hat(x_perturbed)
+        consistency_loss = F.l1_loss(x, x_perturbed)
+        
         for weight in self.weights:
             # At extremely low resolutions, LPIPS stops making sense, so omit those
             if y.shape[-1] <= self.min_loss_res:
@@ -52,5 +56,6 @@ class MultiscaleLPIPS:
         
         total = torch.stack(losses).sum(dim=0) if len(losses) > 0 else 0.0
         l1 = self.l1_weight * F.l1_loss(x, y)
-
-        return total + l1
+        total_loss = total + l1 + consistency_weight * consistency_loss
+        return total_loss
+        
