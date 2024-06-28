@@ -43,8 +43,8 @@ class MultiscaleLPIPS:
             
             if weight > 0:
                 loss_x = self.measure_lpips(x, y, mask)
-                loss_x_pertubed = self.measure_lpips(x_pertubed, y, mask)
-                symmetric_loss = (loss_x + loss_x_pertubed) / 2.0
+                loss_x_perturbed = self.measure_lpips(x_perturbed, y, mask)
+                symmetric_loss = (loss_x + loss_x_perturbed) / 2.0
                 losses.append(weight * symmetric_loss)
 
             if mask is not None:
