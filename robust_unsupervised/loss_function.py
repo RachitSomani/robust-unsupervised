@@ -34,6 +34,10 @@ class MultiscaleLPIPS:
 
         x_perturbed = x_clean + torch.randn_like(x_clean) * 0.01  # Add small perturbations
         x_perturbed = f_hat(x_perturbed)
+
+        if x_perturbed.shape != x.shape:
+            x_perturbed = F.interpolate(x_perturbed, size=x.shape[2:], mode='bilinear', align_corners=False)
+            
         consistency_loss = F.l1_loss(x, x_perturbed)
         
         for weight in self.weights:
