@@ -36,7 +36,7 @@ class MultiscaleLPIPS:
         x_perturbed = f_hat(x_perturbed)
         consistency_loss = F.l1_loss(x, x_perturbed)
 
-        x_perturbed = F.interpolate(x_perturbed, size=y.shape[2:], mode='bilinear', align_corners=False)
+        x_perturbed = F.interpolate(x_perturbed, size=y.shape[-2:], mode='bilinear', align_corners=False)
             
         
         for weight in self.weights:
@@ -56,6 +56,7 @@ class MultiscaleLPIPS:
             x = F.avg_pool2d(x, 2)
             x_clean = F.avg_pool2d(x_clean, 2)
             y = F.avg_pool2d(y, 2)
+            x_perturbed=F.avg_pool2d(x_perturbed,2)
         
         total = torch.stack(losses).sum(dim=0) if len(losses) > 0 else 0.0
         l1 = self.l1_weight * F.l1_loss(x, y)
