@@ -79,7 +79,8 @@ if __name__ == '__main__':
         for j, image_path in enumerate(image_paths):
             with directory(f"inversions/{j:04d}"):
                 print(f"- {j:04d}")
-                
+
+                degradation = task.init_degradation()
                 target = open_image(image_path, config.resolution)  # Load degraded image as target
                 save_image(target, f"degraded_input.png")
                 
