@@ -20,7 +20,7 @@ def run_phase(label: str, variable: Variable, lr: float):
     try:
         for _ in tqdm.tqdm(range(150), desc=label):
             x = variable.to_image()
-            loss = loss_fn(x, target).mean()  # Directly compare x to target
+            loss = loss_fn(degradation.degrade_prediction, x, target).mean()  # Directly compare x to target
 
             optimizer.zero_grad()
             loss.backward()
