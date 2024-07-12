@@ -60,6 +60,6 @@ class MultiscaleLPIPS:
         
         total = torch.stack(losses).sum(dim=0) if len(losses) > 0 else 0.0
         l1 = self.l1_weight * F.l1_loss(x, y)
-        total_loss = total + l1 + consistency_weight * consistency_loss
+        total_loss = total + l1 + consistency_loss
         return total_loss
         
