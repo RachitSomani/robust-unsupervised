@@ -24,7 +24,7 @@ class MultiscaleLPIPS:
 
         return self.lpips_network(x, y, normalize=True).mean() 
 
-    def __call__(self, f_hat, x_clean: Tensor, y: Tensor, mask: Optional[Tensor] = None, consistency_weight: float = 0.5):
+    def __call__(self, f_hat, x_clean: Tensor, y: Tensor, mask: Optional[Tensor] = None, consistency_weight: float = 0.3):
         x = f_hat(x_clean)
 
         losses = []
