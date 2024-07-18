@@ -30,6 +30,7 @@ import training.networks as networks
 
 from abc import ABC, abstractmethod, abstractstaticmethod, abstractclassmethod
 from dataclasses import dataclass, field
+from pytorch_msssim import ms_ssim
 
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
