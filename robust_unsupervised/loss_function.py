@@ -7,7 +7,7 @@ class MultiscaleLPIPS:
         self,
         min_loss_res: int = 16,
         level_weights: List[float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-        ssim_weight: float = 0.5,
+        ssim_weight: float = 0.2,
         l1_weight: float = 0.1
     ):
         super().__init__()
@@ -26,8 +26,8 @@ class MultiscaleLPIPS:
 
         return self.lpips_network(x, y, normalize=True).mean() 
 
-    def ms_ssim_loss(self, pred, target):
-        return 1 - ms_ssim(pred, target, data_range=1.0, size_average=True)
+    def ssim_loss(self, pred, target):
+        return 1 - ssim(pred, target, data_range=1.0, size_average=True)
 
     def __call__(self, f_hat, x_clean: Tensor, y: Tensor, mask: Optional[Tensor] = None, consistency_weight: float = 0.3):
         x = f_hat(x_clean)
@@ -65,7 +65,7 @@ class MultiscaleLPIPS:
         
         total = torch.stack(losses).sum(dim=0) if len(losses) > 0 else 0.0
         l1 = self.l1_weight * F.l1_loss(x, y)
-        ssim = self.ssim_weight * self.ms_ssim_loss(x, y)
+        ssim = self.ssim_weight * self.ssim_loss(x, y)
         total_loss = total + l1 + ssim + consistency_weight * consistency_loss
         return total_loss
         
