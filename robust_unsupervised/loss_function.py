@@ -47,9 +47,9 @@ class MultiscaleLPIPS:
         consistency_loss = F.l1_loss(x, x_perturbed)
 
         if x.shape[1] == 1 and y.shape[1] == 3:
-            x = x.repeat(1, 3, 1, 1)  # Convert x to 3 channels
+            x = x.repeat(1, 1, 1, 1)  # Convert x to 3 channels
         elif x.shape[1] == 3 and y.shape[1] == 1:
-            y = y.repeat(1, 3, 1, 1)  # Convert y to 3 channels
+            y = y.repeat(1, 1, 1, 1)  # Convert y to 3 channels
             
         x_perturbed = F.interpolate(x_perturbed, size=y.shape[-2:], mode='bilinear', align_corners=False)
         x= F.interpolate(x, size=y.shape[-2:], mode='bilinear', align_corners=False) 
