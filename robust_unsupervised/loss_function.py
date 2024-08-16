@@ -47,7 +47,7 @@ class MultiscaleLPIPS:
         consistency_loss = F.l1_loss(x, x_perturbed)
 
         x_perturbed = F.interpolate(x_perturbed, size=y.shape[-2:], mode='bilinear', align_corners=False)
-            
+        x= F.interpolate(x, size=y.shape[-2:], mode='bilinear', align_corners=False) 
         
         for weight in self.weights:
             
