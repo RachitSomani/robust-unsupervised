@@ -32,6 +32,8 @@ class MultiscaleLPIPS:
         # Ensure win_size is odd
         win_size = win_size - 1 if win_size % 2 == 0 else win_size
         pred = pred.mean(dim=1, keepdim=True)
+        target = target.mean(dim=1, keepdim=True)
+        
         return 1 - ssim(pred, target, data_range=1.0, size_average=True, win_size=win_size)
 
     def __call__(self, f_hat, x_clean: Tensor, y: Tensor, mask: Optional[Tensor] = None, consistency_weight: float = 0.3):
