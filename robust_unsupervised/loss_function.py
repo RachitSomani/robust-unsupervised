@@ -31,14 +31,12 @@ class MultiscaleLPIPS:
         win_size = min(11, min_size)  # Use 11 or smaller if the image is smaller
         # Ensure win_size is odd
         win_size = win_size - 1 if win_size % 2 == 0 else win_size
-        pred = 0.2989 * pred[:, 0:1] + 0.5870 * pred[:, 1:2] + 0.1140 * pred[:, 2:3]
-        target = 0.2989 * target[:, 0:1] + 0.5870 * target[:, 1:2] + 0.1140 * target[:, 2:3]
-
-        if pred.shape[1] == 0:
-            pred = pred.unsqueeze(1)
-        if target.shape[1] == 0:
-            target = target.unsqueeze(1)
         
+        if pred.shape[1] == 3:  # If it's an RGB image
+            pred = (0.2989 * pred[:, 0] + 0.5870 * pred[:, 1] + 0.1140 * pred[:, 2]).unsqueeze(1)
+        if target.shape[1] == 3:  # If it's an RGB image
+            target =  (0.2989 * target[:, 0] + 0.5870 * target[:, 1] + 0.1140 * target[:, 2]).unsqueeze(1)
+            
         return 1 - ssim(pred, target, data_range=1.0, size_average=True, win_size=win_size)
 
     def __call__(self, f_hat, x_clean: Tensor, y: Tensor, mask: Optional[Tensor] = None, consistency_weight: float = 0.3):
