@@ -31,8 +31,8 @@ class MultiscaleLPIPS:
         win_size = min(11, min_size)  # Use 11 or smaller if the image is smaller
         # Ensure win_size is odd
         win_size = win_size - 1 if win_size % 2 == 0 else win_size
-        pred = pred.mean(dim=1, keepdim=True)
-        target = target.mean(dim=1, keepdim=True)
+        pred = 0.2989 * pred[:, 0:1] + 0.5870 * pred[:, 1:2] + 0.1140 * pred[:, 2:3]
+        target = 0.2989 * target[:, 0:1] + 0.5870 * target[:, 1:2] + 0.1140 * target[:, 2:3]
         
         return 1 - ssim(pred, target, data_range=1.0, size_average=True, win_size=win_size)
 
