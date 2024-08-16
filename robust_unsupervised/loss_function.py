@@ -31,7 +31,7 @@ class MultiscaleLPIPS:
         win_size = min(11, min_size)  # Use 11 or smaller if the image is smaller
         # Ensure win_size is odd
         win_size = win_size - 1 if win_size % 2 == 0 else win_size
-        
+        pred = pred.mean(dim=1, keepdim=True)
         return 1 - ssim(pred, target, data_range=1.0, size_average=True, win_size=win_size)
 
     def __call__(self, f_hat, x_clean: Tensor, y: Tensor, mask: Optional[Tensor] = None, consistency_weight: float = 0.3):
@@ -45,14 +45,7 @@ class MultiscaleLPIPS:
         x_perturbed = x_clean + torch.randn_like(x_clean) * 0.01  # Add small perturbations
         x_perturbed = f_hat(x_perturbed)
         consistency_loss = F.l1_loss(x, x_perturbed)
-
-        if x.size(1) == 3:
-            x = x.mean(dim=1, keepdim=True)
-        if y.size(1) == 3:
-            y = y.mean(dim=1,keepdim=True)
-
-
-            
+        
         x_perturbed = F.interpolate(x_perturbed, size=y.shape[-2:], mode='bilinear', align_corners=False)
         x= F.interpolate(x, size=y.shape[-2:], mode='bilinear', align_corners=False) 
         
