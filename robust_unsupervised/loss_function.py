@@ -46,7 +46,11 @@ class MultiscaleLPIPS:
         x_perturbed = f_hat(x_perturbed)
         consistency_loss = F.l1_loss(x, x_perturbed)
 
-        x= x.mean(dim=1, keepdim=True) if x.size(1) == 3 else x
+        if x.size(1) == 3:
+            x = x.mean(dim=1, keepdim=True)
+        if y.size(1) == 3:
+            y = y.mean(dim=1,keepdim=True)
+
 
             
         x_perturbed = F.interpolate(x_perturbed, size=y.shape[-2:], mode='bilinear', align_corners=False)
