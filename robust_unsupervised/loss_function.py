@@ -33,6 +33,11 @@ class MultiscaleLPIPS:
         win_size = win_size - 1 if win_size % 2 == 0 else win_size
         pred = 0.2989 * pred[:, 0:1] + 0.5870 * pred[:, 1:2] + 0.1140 * pred[:, 2:3]
         target = 0.2989 * target[:, 0:1] + 0.5870 * target[:, 1:2] + 0.1140 * target[:, 2:3]
+
+        if pred.shape[1] == 0:
+            pred = pred.unsqueeze(1)
+        if target.shape[1] == 0:
+            target = target.unsqueeze(1)
         
         return 1 - ssim(pred, target, data_range=1.0, size_average=True, win_size=win_size)
 
