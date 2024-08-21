@@ -108,9 +108,9 @@ if __name__ == '__main__':
     else:
         raise Exception("Invalid task name")
     
-    tasks = [
-        benchmark.get_task("upsampling", "M")
-    ]
+    # tasks = [
+    #     benchmark.get_task("upsampling", "M")
+    # ]
 
     for task in tasks:
         experiment_path = f"out/{config.name}/{timestamp}/{task.category}/{task.name}/{task.level}/"
