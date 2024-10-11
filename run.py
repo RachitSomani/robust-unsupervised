@@ -109,7 +109,7 @@ if __name__ == '__main__':
         raise Exception("Invalid task name")
     
     tasks = [
-        benchmark.get_task("upsampling", "S")
+        benchmark.get_task("upsampling", "XS")
     ]
 
     for task in tasks:
